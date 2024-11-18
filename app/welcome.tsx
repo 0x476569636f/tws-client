@@ -11,9 +11,11 @@ import Animated, {
   withTiming,
   Easing,
 } from 'react-native-reanimated';
+import { usePreventDoubleNavigation } from '~/hooks/usePreventDoubleNavigation';
 
 const Welcome = () => {
   const router = useRouter();
+  const { navigateSafely, isNavigating } = usePreventDoubleNavigation();
 
   // Animasi translasi vertikal untuk logo
   const translateY = useSharedValue(0);
@@ -77,13 +79,14 @@ const Welcome = () => {
             style={{
               opacity: 0.7,
             }}>
-            Tempatnya Baca Berita Terupdate
+            Inspirasi dan Informasi Setiap Hari
           </Text>
         </View>
 
         <View className="w-full gap-7">
           <Button
-            onPress={() => router.push('/')}
+            onPress={() => navigateSafely('/', 'push')}
+            disabled={isNavigating}
             style={{
               shadowColor: '#000',
               shadowOffset: {
@@ -94,13 +97,13 @@ const Welcome = () => {
               shadowRadius: 3.84,
               elevation: 5,
             }}>
-            <Text>Mulai Sekarang</Text>
+            <Text className="p-1">Mulai Sekarang</Text>
           </Button>
         </View>
 
         <View className="mb-6 flex flex-row items-center gap-1">
           <Text variant={'subhead'}>Sudah punya akun?</Text>
-          <Pressable onPress={() => router.push('/')}>
+          <Pressable onPress={() => navigateSafely('/', 'push')}>
             <Text variant={'subhead'} className="font-semibold text-primary">
               Masuk
             </Text>
