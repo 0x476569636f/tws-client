@@ -11,7 +11,6 @@ import Animated, {
   withTiming,
   Easing,
 } from 'react-native-reanimated';
-import { Image } from 'expo-image';
 
 const Welcome = () => {
   const router = useRouter();
