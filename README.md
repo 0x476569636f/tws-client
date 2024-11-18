@@ -1,2 +1,0 @@
-# vigenesia-client
-📱📱📱

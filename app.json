@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "vigenesia",
+    "slug": "vigenesia",
+    "version": "1.0.0",
+    "scheme": "vigenesia",
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true,
+      "tsconfigPaths": true
+    },
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.darknet1255.twsportalberitaclient"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9820d659-a0cf-41bf-beff-b5f74aea49e3"
+      }
+    }
+  }
+}
