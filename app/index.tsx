@@ -1,4 +1,3 @@
-import { View } from 'react-native';
 import { Text } from '~/components/nativewindui/Text';
 import React from 'react';
 import { Button } from '~/components/nativewindui/Button';
@@ -9,7 +8,7 @@ const index = () => {
   const router = useRouter();
   return (
     <ScreenWrapper>
-      <Text>Halo dunia</Text>
+      <Text className="font-inter-bold">Halo dunia</Text>
       <Button onPress={() => router.push('/welcome')}>
         <Text>Login</Text>
       </Button>

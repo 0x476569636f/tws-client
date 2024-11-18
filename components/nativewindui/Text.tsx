@@ -2,6 +2,7 @@ import { VariantProps, cva } from 'class-variance-authority';
 import { cssInterop } from 'nativewind';
 import * as React from 'react';
 import { UITextView } from 'react-native-uitextview';
+import { TextProps as RNTextProps, TextStyle } from 'react-native';
 
 import { cn } from '~/lib/cn';
 
@@ -37,18 +38,28 @@ const textVariants = cva('text-foreground', {
 
 const TextClassContext = React.createContext<string | undefined>(undefined);
 
-function Text({
-  className,
-  variant,
-  color,
-  ...props
-}: React.ComponentPropsWithoutRef<typeof UITextView> & VariantProps<typeof textVariants>) {
+// Comprehensive type definition
+type TextProps = Omit<RNTextProps, 'style'> &
+  VariantProps<typeof textVariants> & {
+    children?: React.ReactNode;
+    uiTextView?: boolean;
+    style?: TextStyle | TextStyle[];
+    className?: string;
+  };
+
+function Text({ className, variant, color, children, style, ...props }: TextProps) {
   const textClassName = React.useContext(TextClassContext);
+
+  // Determine which component to use based on uiTextView prop
+  const Component = props.uiTextView === false ? require('react-native').Text : UITextView;
+
+  // Merge variant classes with custom className
+  const combinedClassName = cn(textVariants({ variant, color }), textClassName, className);
+
   return (
-    <UITextView
-      className={cn(textVariants({ variant, color }), textClassName, className)}
-      {...props}
-    />
+    <Component className={combinedClassName} style={style} {...props}>
+      {children}
+    </Component>
   );
 }
 

@@ -64,18 +64,18 @@ const Welcome = () => {
 
         <View className="gap-2">
           <Text
-            className="text-center"
+            className="font-inter-bold text-center"
             variant={'largeTitle'}
             style={{
               textShadowColor: 'rgba(0, 0, 0, 0.15)',
               textShadowOffset: { width: 1, height: 1 },
               textShadowRadius: 3,
             }}>
-            Vigenesia
+            VIGENESIA
           </Text>
           <Text
-            className="text-center"
-            variant={'footnote'}
+            className="font-inter-regular text-center"
+            variant={'subhead'}
             style={{
               opacity: 0.7,
             }}>
@@ -97,14 +97,16 @@ const Welcome = () => {
               shadowRadius: 3.84,
               elevation: 5,
             }}>
-            <Text className="p-1">Mulai Sekarang</Text>
+            <Text className="font-inter-regular p-1">Mulai Sekarang</Text>
           </Button>
         </View>
 
         <View className="mb-6 flex flex-row items-center gap-1">
-          <Text variant={'subhead'}>Sudah punya akun?</Text>
+          <Text variant={'subhead'} className="font-inter-regular">
+            Sudah punya akun?
+          </Text>
           <Pressable onPress={() => navigateSafely('/', 'push')}>
-            <Text variant={'subhead'} className="font-semibold text-primary">
+            <Text variant={'subhead'} className="font-inter-semibold font-semibold text-primary">
               Masuk
             </Text>
           </Pressable>

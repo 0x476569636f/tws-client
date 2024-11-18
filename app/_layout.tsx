@@ -8,7 +8,23 @@ import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useColorScheme, useInitialAndroidBarSync } from '~/lib/useColorScheme';
 import { NAV_THEME } from '~/theme';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import * as SplashScreen from 'expo-splash-screen';
+import {
+  useFonts,
+  Inter_100Thin,
+  Inter_200ExtraLight,
+  Inter_300Light,
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  Inter_800ExtraBold,
+  Inter_900Black,
+} from '@expo-google-fonts/inter';
+
+// Prevent the splash screen from auto-hiding
+SplashScreen.preventAutoHideAsync();
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -16,8 +32,32 @@ export {
 } from 'expo-router';
 
 export default function RootLayout() {
-  useInitialAndroidBarSync();
   const { colorScheme, isDarkColorScheme } = useColorScheme();
+
+  // Load fonts
+  const [fontsLoaded] = useFonts({
+    Inter_100Thin,
+    Inter_200ExtraLight,
+    Inter_300Light,
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+    Inter_800ExtraBold,
+    Inter_900Black,
+  });
+
+  // Prevent rendering until fonts are loaded
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  // Return null if fonts are not loaded
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <>
@@ -25,9 +65,6 @@ export default function RootLayout() {
         key={`root-status-bar-${isDarkColorScheme ? 'light' : 'dark'}`}
         style={isDarkColorScheme ? 'light' : 'dark'}
       />
-      {/* WRAP YOUR APP WITH ANY ADDITIONAL PROVIDERS HERE */}
-      {/* <ExampleProvider> */}
-
       <GestureHandlerRootView style={{ flex: 1 }}>
         <BottomSheetModalProvider>
           <ActionSheetProvider>
@@ -37,8 +74,6 @@ export default function RootLayout() {
           </ActionSheetProvider>
         </BottomSheetModalProvider>
       </GestureHandlerRootView>
-
-      {/* </ExampleProvider> */}
     </>
   );
 }
