@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import ScreenWrapper from '~/components/ScreenWrapperWithNavbar';
-import { useRouter } from 'expo-router';
 import { Text } from '~/components/nativewindui/Text';
 import Input from '~/components/Input';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -27,19 +26,21 @@ import * as yup from 'yup';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { usePreventDoubleNavigation } from '~/hooks/usePreventDoubleNavigation';
+import { useAuth } from '~/context/auth';
+import Toast from 'react-native-toast-message';
 
 // Skema validasi Yup
 const schema = yup.object().shape({
   email: yup.string().required('* Email harus diisi').email('Email tidak valid'),
-  password: yup.string().required('* Password harus diisi').min(8, 'Password minimal 8 karakter'),
+  password: yup.string().required('* Password harus diisi'),
 });
 
 const SignIn = () => {
   const { isDarkColorScheme, colors } = useColorScheme();
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { navigateSafely, isNavigating } = usePreventDoubleNavigation();
+  const { login } = useAuth();
 
   const {
     control,
@@ -56,18 +57,15 @@ const SignIn = () => {
   type FormData = yup.InferType<typeof schema>;
 
   const onPressLogin = async (formData: FormData) => {
-    const { email, password } = formData;
+    const email = formData.email.trim();
+    const password = formData.password.trim();
     setLoading(true);
 
     try {
-      // Simulasi proses login
-      console.log('Login Data:', { email, password });
-
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      Alert.alert('Berhasil', 'Anda berhasil login!');
-    } catch (error) {
-      Alert.alert('Gagal', 'Terjadi kesalahan saat login');
+      await login(email, password);
+    } catch (error: any) {
+      // For debugging purposes
+      // console.error(error);
     } finally {
       setLoading(false);
     }

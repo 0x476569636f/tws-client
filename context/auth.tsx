@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { router } from 'expo-router';
 import { API_URL } from '~/constant';
+import Toast from 'react-native-toast-message';
 
 interface User {
   id: number;
@@ -76,24 +77,56 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (response.data) {
         const { user, token } = response.data;
-        await AsyncStorage.setItem('user', JSON.stringify(user));
-        await AsyncStorage.setItem('token', token);
-        setUser(user);
-        router.replace('/home');
+        Toast.show({
+          type: 'success',
+          text1: 'Login Berhasil',
+          text2: 'Anda akan diarahkan ke halaman beranda',
+          visibilityTime: 2000,
+          topOffset: 60,
+          onHide: async () => {
+            await AsyncStorage.setItem('user', JSON.stringify(user));
+            await AsyncStorage.setItem('token', token);
+            setUser(user);
+            router.replace('/home');
+          },
+        });
       }
     } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Login Gagal',
+        text2: 'Periksa kembali email dan password anda',
+        visibilityTime: 3000,
+        autoHide: true,
+        topOffset: 60,
+      });
       throw error;
     }
   };
 
   const logout = async () => {
     try {
-      await AsyncStorage.removeItem('user');
-      await AsyncStorage.removeItem('token');
-
-      setUser(null);
-      router.replace('/welcome');
+      Toast.show({
+        type: 'success',
+        text1: 'Logout Berhasil',
+        text2: 'Sampai jumpa lagi',
+        visibilityTime: 2000,
+        topOffset: 60,
+        onHide: async () => {
+          await AsyncStorage.removeItem('user');
+          await AsyncStorage.removeItem('token');
+          setUser(null);
+          router.replace('/welcome');
+        },
+      });
     } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Logout Gagal',
+        text2: 'Silahkan coba lagi',
+        visibilityTime: 3000,
+        autoHide: true,
+      });
       console.error('Logout error:', error);
       throw error;
     }

@@ -22,6 +22,10 @@ import {
   Inter_800ExtraBold,
   Inter_900Black,
 } from '@expo-google-fonts/inter';
+import { AuthProvider } from '~/context/auth';
+import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
+
+import { COLORS } from '~/theme/colors';
 
 // Prevent the splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
@@ -33,6 +37,7 @@ export {
 
 export default function RootLayout() {
   const { colorScheme, isDarkColorScheme } = useColorScheme();
+  const colors = colorScheme === 'dark' ? COLORS.dark : COLORS.light;
 
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -59,6 +64,60 @@ export default function RootLayout() {
     return null;
   }
 
+  //Toast
+  const toastConfig = {
+    success: (props: any) => {
+      return (
+        <BaseToast
+          {...props}
+          style={{
+            borderRadius: 8,
+            borderLeftColor: colors.primary,
+            backgroundColor: colors.card,
+          }}
+          contentContainerStyle={{
+            paddingHorizontal: 15,
+            paddingVertical: 10,
+          }}
+          text1Style={{
+            fontSize: 15,
+            fontWeight: '400',
+            fontFamily: 'Inter_500Medium',
+            color: colors.foreground,
+          }}
+          text2Style={{
+            fontSize: 13,
+            fontFamily: 'Inter_400Regular',
+            color: colors.foreground,
+          }}
+        />
+      );
+    },
+    error: (props: any) => {
+      return (
+        <ErrorToast
+          {...props}
+          style={{
+            borderRadius: 8,
+            borderLeftColor: colors.destructive,
+            backgroundColor: colors.card,
+          }}
+          text1Style={{
+            fontSize: 15,
+            fontWeight: '400',
+            fontFamily: 'Inter_500Medium',
+            color: colors.foreground,
+          }}
+          text2Style={{
+            fontSize: 13,
+            fontFamily: 'Inter_400Regular',
+            color: colors.foreground,
+          }}
+        />
+      );
+    },
+  };
+
   return (
     <>
       <StatusBar
@@ -70,6 +129,7 @@ export default function RootLayout() {
           <ActionSheetProvider>
             <NavThemeProvider value={NAV_THEME[colorScheme]}>
               <_layout />
+              <Toast config={toastConfig} />
             </NavThemeProvider>
           </ActionSheetProvider>
         </BottomSheetModalProvider>
@@ -83,7 +143,11 @@ const SCREEN_OPTIONS = {
 } as const;
 
 const _layout = () => {
-  return <MainLayout />;
+  return (
+    <AuthProvider>
+      <MainLayout />
+    </AuthProvider>
+  );
 };
 
 const MainLayout = () => {
