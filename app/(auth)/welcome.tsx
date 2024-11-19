@@ -85,7 +85,7 @@ const Welcome = () => {
 
         <View className="w-full gap-7">
           <Button
-            onPress={() => navigateSafely('/', 'push')}
+            onPress={() => navigateSafely('/sign-up', 'push')}
             disabled={isNavigating}
             style={{
               shadowColor: '#000',
