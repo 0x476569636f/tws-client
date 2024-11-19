@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import { router } from 'expo-router';
 import { API_URL } from '~/constant';
 
@@ -59,31 +60,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch(`${API_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
+      const response = await axios.post(
+        `${API_URL}/auth/login`,
+        {
+          email,
+          password,
         },
-        body: JSON.stringify({ email, password }),
-      });
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+        }
+      );
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Login failed');
-      }
-
-      const data = await response.json();
-
-      if (data) {
-        const { user, token } = data;
+      if (response.data) {
+        const { user, token } = response.data;
         await AsyncStorage.setItem('user', JSON.stringify(user));
         await AsyncStorage.setItem('token', token);
         setUser(user);
         router.replace('/home');
       }
     } catch (error) {
-      console.error('Login error:', error);
       throw error;
     }
   };
