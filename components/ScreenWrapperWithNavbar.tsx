@@ -16,7 +16,9 @@ const ScreenWrapper: React.FC<ScreenWrapperProps> = ({ children, routeName = '' 
   return (
     <View style={{ flex: 1, paddingTop }}>
       <View className="flex w-full flex-row items-center justify-between bg-background p-4">
-        <Text variant={'heading'}>{routeName}</Text>
+        <Text variant={'heading'} className="font-inter-medium">
+          {routeName}
+        </Text>
         <ThemeToggle />
       </View>
       {children}
