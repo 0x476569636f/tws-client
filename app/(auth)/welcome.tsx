@@ -105,7 +105,7 @@ const Welcome = () => {
           <Text variant={'subhead'} className="font-inter-regular">
             Sudah punya akun?
           </Text>
-          <Pressable onPress={() => navigateSafely('/', 'push')}>
+          <Pressable onPress={() => navigateSafely('/sign-in', 'push')} disabled={isNavigating}>
             <Text variant={'subhead'} className="font-inter-semibold font-semibold text-primary">
               Masuk
             </Text>

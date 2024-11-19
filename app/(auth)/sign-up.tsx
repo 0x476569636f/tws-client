@@ -27,6 +27,7 @@ import Animated, {
   SlideInRight,
   SlideOutLeft,
 } from 'react-native-reanimated';
+import { usePreventDoubleNavigation } from '~/hooks/usePreventDoubleNavigation';
 
 const schema = yup.object().shape({
   name: yup
@@ -55,6 +56,7 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { navigateSafely, isNavigating } = usePreventDoubleNavigation();
 
   const {
     control,
@@ -229,7 +231,9 @@ const SignUp = () => {
                 <Text variant="subhead" className="font-inter-regular">
                   Sudah punya akun?
                 </Text>
-                <Pressable onPress={() => router.push('/')}>
+                <Pressable
+                  onPress={() => navigateSafely('/sign-in', 'replace')}
+                  disabled={isNavigating}>
                   <Text variant="subhead" className="font-inter-semibold text-primary">
                     Masuk
                   </Text>
