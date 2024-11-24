@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import ScreenWrapper from '~/components/ScreenWrapperWithNavbar';
-import { useRouter } from 'expo-router';
 import { Text } from '~/components/nativewindui/Text';
 import Input from '~/components/Input';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -28,6 +27,10 @@ import Animated, {
   SlideOutLeft,
 } from 'react-native-reanimated';
 import { usePreventDoubleNavigation } from '~/hooks/usePreventDoubleNavigation';
+import axios from 'axios';
+import Toast from 'react-native-toast-message';
+import { API_URL } from '~/constant';
+import { useRouter } from 'expo-router';
 
 const schema = yup.object().shape({
   name: yup
@@ -51,9 +54,9 @@ const schema = yup.object().shape({
 });
 
 const SignUp = () => {
-  const { isDarkColorScheme, colors } = useColorScheme();
-  const router = useRouter();
+  const { isDarkColorScheme } = useColorScheme();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { navigateSafely, isNavigating } = usePreventDoubleNavigation();
@@ -75,18 +78,63 @@ const SignUp = () => {
   type FormData = yup.InferType<typeof schema>;
 
   const onPressSend = async (formData: FormData) => {
-    const { name, email, password } = formData;
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    const password = formData.password.trim();
+
     setLoading(true);
 
     try {
-      console.log('Signup Data:', { name, email, password });
+      const response = await axios.post(
+        `${API_URL}/auth/register`,
+        {
+          name,
+          email,
+          password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+        }
+      );
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      Alert.alert('Berhasil', 'Akun berhasil dibuat!');
+      if (response.status == 200) {
+        Toast.show({
+          type: 'success',
+          text1: 'Registrasi Berhasil',
+          text2: 'Anda akan diarahkan ke halaman login',
+          visibilityTime: 2000,
+          topOffset: 60,
+          onHide: async () => {
+            router.replace('/sign-in');
+          },
+        });
+      }
     } catch (error) {
-      Alert.alert('Gagal', 'Terjadi kesalahan saat mendaftar');
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.message ||
+          error.response?.data?.error?.issues[0].message ||
+          'Terjadi kesalahan saat mendaftar';
+
+        Toast.show({
+          type: 'error',
+          text1: 'Registrasi Gagal',
+          text2: errorMessage,
+          visibilityTime: 3000,
+          topOffset: 60,
+        });
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Registrasi Gagal',
+          text2: 'Terjadi kesalahan yang tidak diketahui',
+          visibilityTime: 3000,
+          topOffset: 60,
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -154,7 +202,7 @@ const SignUp = () => {
           <Animated.Text
             entering={FadeInDown}
             exiting={FadeOut}
-            className="font-inter-regular mt-1 pl-2 text-xs text-destructive">
+            className="mt-1 pl-2 font-inter-regular text-xs text-destructive">
             {errors[field]?.message}
           </Animated.Text>
         )}
@@ -179,12 +227,12 @@ const SignUp = () => {
             showsVerticalScrollIndicator={false}>
             <Animated.View entering={FadeInUp} className="flex flex-1 gap-4 px-6 py-4">
               <View className="mb-4 items-center">
-                <Text variant="largeTitle" className="font-inter-bold text-center">
+                <Text variant="largeTitle" className="text-center font-inter-bold">
                   Buat Akun Baru
                 </Text>
                 <Text
                   variant="subhead"
-                  className="font-inter-regular mt-2 text-center text-muted-foreground">
+                  className="mt-2 text-center font-inter-regular text-muted-foreground">
                   Bergabunglah, Temukan Inspirasi dan Informasi Setiap Hari
                 </Text>
               </View>
