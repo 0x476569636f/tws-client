@@ -27,11 +27,10 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { usePreventDoubleNavigation } from '~/hooks/usePreventDoubleNavigation';
 import { useAuth } from '~/context/auth';
-import Toast from 'react-native-toast-message';
 
 // Skema validasi Yup
 const schema = yup.object().shape({
-  email: yup.string().required('* Email harus diisi').email('Email tidak valid'),
+  email: yup.string().required('* Email harus diisi').email('* Email tidak valid'),
   password: yup.string().required('* Password harus diisi'),
 });
 
@@ -88,12 +87,12 @@ const SignIn = () => {
             showsVerticalScrollIndicator={false}>
             <Animated.View entering={FadeInUp} className="flex flex-1 gap-4 px-6 py-4">
               <View className="mb-4 items-center">
-                <Text variant="largeTitle" className="font-inter-bold text-center">
+                <Text variant="largeTitle" className="text-center font-inter-bold">
                   Masuk ke Akun
                 </Text>
                 <Text
                   variant="subhead"
-                  className="font-inter-regular mt-2 text-center text-muted-foreground">
+                  className="mt-2 text-center font-inter-regular text-muted-foreground">
                   Silakan Masuk Untuk Mengakses Berita dan Motivasi Terbaru
                 </Text>
               </View>
@@ -140,7 +139,7 @@ const SignIn = () => {
                       )}
                     />
                     {errors.email && (
-                      <Text className="font-inter-regular mt-1 pl-2 text-xs text-destructive">
+                      <Text className="mt-1 pl-2 font-inter-regular text-xs text-destructive">
                         {errors.email.message}
                       </Text>
                     )}
@@ -192,7 +191,7 @@ const SignIn = () => {
                       )}
                     />
                     {errors.password && (
-                      <Text className="font-inter-regular mt-1 pl-2 text-xs text-destructive">
+                      <Text className="mt-1 pl-2 font-inter-regular text-xs text-destructive">
                         {errors.password.message}
                       </Text>
                     )}
