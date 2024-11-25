@@ -202,7 +202,8 @@ const Home = () => {
           </Text>
           <View className="mt-2 flex-row justify-between">
             <Text className="font-inter-regular text-xs text-white/80">
-              {item.kategori?.namaKategori || 'Kategori'} • {item.user?.name || 'Penulis'}
+              {item.kategori?.namaKategori || 'Kategori'} • Ditulis oleh{' '}
+              {item.user?.name || 'Penulis'}
             </Text>
             <Text className="font-inter-regular text-xs text-white/80">
               {new Date(item.createdAt).toLocaleDateString()}
@@ -245,7 +246,8 @@ const Home = () => {
           </Text>
           <View className="mt-1 flex-row">
             <Text className="font-inter-regular text-xs text-muted-foreground">
-              {item.kategori?.namaKategori || 'Kategori'} • {item.user?.name || 'Penulis'}
+              {item.kategori?.namaKategori || 'Kategori'} • Ditulis oleh{' '}
+              {item.user?.name || 'Penulis'}
             </Text>
           </View>
         </View>
