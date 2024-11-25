@@ -95,7 +95,7 @@ const NewsDetailScreen = () => {
 
   if (loading) {
     return (
-      <ScreenWrapper>
+      <ScreenWrapper routeName="Detail Berita">
         <View className="flex-1 items-center justify-center">
           <Loading />
         </View>
@@ -105,7 +105,7 @@ const NewsDetailScreen = () => {
 
   if (error || !newsDetail) {
     return (
-      <ScreenWrapper>
+      <ScreenWrapper routeName="Detail Berita">
         <View className="flex-1 items-center justify-center p-4">
           <AntDesign name="warning" size={64} color="red" />
           <Text className="mt-4 text-center font-inter-regular text-lg">
@@ -120,7 +120,7 @@ const NewsDetailScreen = () => {
   }
 
   return (
-    <ScreenWrapper>
+    <ScreenWrapper routeName="Detail Berita">
       <ScrollView
         className="flex-1"
         showsVerticalScrollIndicator={false}
