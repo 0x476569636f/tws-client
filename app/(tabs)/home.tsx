@@ -20,7 +20,7 @@ import { useAuth } from '~/context/auth';
 import Loading from '~/components/Loading';
 import { API_URL } from '~/constant';
 import SkeletonHome from '~/components/SkeletonHome';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 
 interface NewsItem {
   id: number;
@@ -125,33 +125,42 @@ const Home = () => {
   }, []);
 
   const handleAddNews = () => {
-    console.log('Add News');
+    router.push('/news/add');
   };
 
   const [
-    { data: news = [], isLoading: isNewsLoading, isError: isNewsError, refetch: refetchNews },
+    {
+      data: news = [],
+      isLoading: isNewsLoading,
+      isError: isNewsError,
+      refetch: refetchNews,
+      isFetching, // Tambahkan ini
+    },
     {
       data: categories = [],
       isLoading: isCategoriesLoading,
       isError: isCategoriesError,
       refetch: refetchCategories,
+      isFetching: isCategoriesFetching, // Tambahkan ini
     },
   ] = useQueries([
     {
       queryKey: 'news',
       queryFn: fetchNews,
-      staleTime: 5 * 60 * 1000,
-      cacheTime: 10 * 60 * 1000,
+      staleTime: 0,
+      cacheTime: 0,
+      refetchOnWindowFocus: true,
+      refetchOnMount: true,
     },
     {
       queryKey: 'categories',
       queryFn: fetchCategories,
-      staleTime: 5 * 60 * 1000,
-      cacheTime: 10 * 60 * 1000,
+      staleTime: 0,
+      cacheTime: 0,
+      refetchOnWindowFocus: true,
+      refetchOnMount: true,
     },
   ]);
-
-  console.log(news);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
