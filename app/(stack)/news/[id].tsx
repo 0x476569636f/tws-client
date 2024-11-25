@@ -12,6 +12,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useColorScheme } from '~/lib/useColorScheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { capitalizeWords } from '~/lib/helpers';
 
 interface NewsDetail {
   id: number;
@@ -177,7 +178,7 @@ const NewsDetailScreen = () => {
               borderBottomRightRadius: 20,
             }}>
             <Text className="font-inter-bold text-xl text-white" numberOfLines={2}>
-              {newsDetail?.judul}
+              {capitalizeWords(newsDetail?.judul)}
             </Text>
           </View>
         </View>

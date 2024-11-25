@@ -21,6 +21,7 @@ import Loading from '~/components/Loading';
 import { API_URL } from '~/constant';
 import SkeletonHome from '~/components/SkeletonHome';
 import { Link, router } from 'expo-router';
+import { capitalizeWords } from '~/lib/helpers';
 
 interface NewsItem {
   id: number;
@@ -197,8 +198,10 @@ const Home = () => {
         />
         <View className="absolute bottom-0 left-0 right-0 bg-black/50 p-4">
           <Text className="font-inter-bold text-lg text-white" numberOfLines={2}>
-            {item.judul.split(' ').slice(0, 10).join(' ') +
-              (item.judul.split(' ').length > 10 ? '...' : '')}
+            {capitalizeWords(
+              item.judul.split(' ').slice(0, 6).join(' ') +
+                (item.judul.split(' ').length > 6 ? '...' : '')
+            )}
           </Text>
           <View className="mt-2 flex-row justify-between">
             <Text className="font-inter-regular text-xs text-white/80">
@@ -216,10 +219,17 @@ const Home = () => {
 
   // Render kategori berita
   const renderCategoryItem = ({ item }: { item: CategoryItem }) => (
-    <TouchableOpacity className="bg-primary/10 mr-4 h-20 w-20 items-center justify-center rounded-xl p-3">
-      <FontAwesome name={getCategoryIcon(item.namaKategori)} size={24} color="#007bff" />
-      <Text className="mt-2 text-center text-xs">{item.namaKategori}</Text>
-    </TouchableOpacity>
+    <Link
+      href={{
+        pathname: '/news/filter/[categoryId]',
+        params: { categoryId: item.id.toString() },
+      }}
+      asChild>
+      <TouchableOpacity className="bg-primary/10 mr-4 h-20 w-20 items-center justify-center rounded-xl p-3">
+        <FontAwesome name={getCategoryIcon(item.namaKategori)} size={24} color="#007bff" />
+        <Text className="mt-2 text-center text-xs">{item.namaKategori}</Text>
+      </TouchableOpacity>
+    </Link>
   );
 
   // Render berita terbaru
@@ -242,7 +252,7 @@ const Home = () => {
         />
         <View className="ml-3 flex-1 justify-center">
           <Text className="font-inter-semibold text-base" numberOfLines={2}>
-            {item.judul}
+            {capitalizeWords(item.judul)}
           </Text>
           <View className="mt-1 flex-row">
             <Text className="font-inter-regular text-xs text-muted-foreground">
