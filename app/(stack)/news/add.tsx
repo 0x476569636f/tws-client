@@ -315,7 +315,9 @@ const AddNewsScreen = () => {
                       className="font-inter-regular text-base"
                     />
                     {errors.isi && (
-                      <Text className="mt-1 text-xs text-destructive">{errors.isi.message}</Text>
+                      <Text className="mt-1 font-inter-regular text-xs text-destructive">
+                        {errors.isi.message}
+                      </Text>
                     )}
                   </View>
                 )}
@@ -331,14 +333,18 @@ const AddNewsScreen = () => {
                     style={{ width: '100%', height: 200, borderRadius: 8 }}
                   />
                 ) : (
-                  <Text className="text-center text-muted-foreground">Pilih Gambar Berita</Text>
+                  <Text className="text-center font-inter-regular text-muted-foreground">
+                    Pilih Gambar Berita
+                  </Text>
                 )}
               </View>
             </TouchableOpacity>
 
             {/* Tombol Submit */}
             <Button onPress={handleSubmit(onSubmit)} disabled={loading}>
-              <Text className="text-white">{loading ? 'Menambahkan...' : 'Tambah Berita'}</Text>
+              <Text className="font-inter-regular text-white">
+                {loading ? 'Menambahkan...' : 'Tambah Berita'}
+              </Text>
             </Button>
           </View>
         </ScrollView>
