@@ -26,6 +26,7 @@ import { AuthProvider } from '~/context/auth';
 import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
 
 import { COLORS } from '~/theme/colors';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 // Prevent the splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
@@ -34,6 +35,8 @@ export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from 'expo-router';
+
+const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const { colorScheme, isDarkColorScheme } = useColorScheme();
@@ -128,8 +131,10 @@ export default function RootLayout() {
         <BottomSheetModalProvider>
           <ActionSheetProvider>
             <NavThemeProvider value={NAV_THEME[colorScheme]}>
-              <_layout />
-              <Toast config={toastConfig} />
+              <QueryClientProvider client={queryClient}>
+                <_layout />
+                <Toast config={toastConfig} />
+              </QueryClientProvider>
             </NavThemeProvider>
           </ActionSheetProvider>
         </BottomSheetModalProvider>
