@@ -129,7 +129,7 @@ const NewsDetailScreen = () => {
         }}>
         {/* Header Actions */}
         <View
-          className="absolute left-4 right-4 top-0 z-10 flex-row justify-between"
+          className="absolute left-4 right-4 top-[-30px] z-10 flex-row justify-between"
           style={{
             paddingTop: insets.top + 10,
             shadowColor: colors.foreground,
