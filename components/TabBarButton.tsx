@@ -10,10 +10,11 @@ import { AntDesign } from '@expo/vector-icons';
 
 const icons = {
   home: (props: any) => <AntDesign name="home" size={24} {...props} />,
+  motivation: (props: any) => <AntDesign name="book" size={24} {...props} />,
   profile: (props: any) => <AntDesign name="user" size={24} {...props} />,
 };
 
-export type RouteName = 'home' | 'profile';
+export type RouteName = 'home' | 'motivation' | 'profile';
 
 interface TabBarButtonProps {
   isFocused: boolean;
@@ -67,7 +68,9 @@ const TabBarButton = (props: TabBarButtonProps) => {
       <Animated.View style={[animatedIconStyle]}>
         <IconComponent color={color} />
       </Animated.View>
-      <Animated.Text style={[{ color }, animatedTextStyle]}>{label}</Animated.Text>
+      <Animated.Text style={[{ color, fontFamily: 'Inter_400Regular' }, animatedTextStyle]}>
+        {label}
+      </Animated.Text>
     </Pressable>
   );
 };

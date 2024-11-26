@@ -17,6 +17,12 @@ const _layout = () => {
         }}
       />
       <Tabs.Screen
+        name="motivation"
+        options={{
+          title: 'Motivasi',
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
           title: 'Profil Saya',
