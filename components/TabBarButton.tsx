@@ -56,12 +56,6 @@ const TabBarButton = (props: TabBarButtonProps) => {
     };
   });
 
-  const animatedBackgroundStyle = useAnimatedStyle(() => ({
-    backgroundColor: backgroundColor.value,
-    borderRadius: 10,
-    padding: 5,
-  }));
-
   const IconComponent = icons[routeName];
   if (!IconComponent) {
     console.warn(`No icon found for route: ${routeName}`);
@@ -70,7 +64,7 @@ const TabBarButton = (props: TabBarButtonProps) => {
 
   return (
     <Pressable {...props} style={styles.container}>
-      <Animated.View style={[animatedBackgroundStyle, animatedIconStyle]}>
+      <Animated.View style={[animatedIconStyle]}>
         <IconComponent color={color} />
       </Animated.View>
       <Animated.Text style={[{ color }, animatedTextStyle]}>{label}</Animated.Text>
