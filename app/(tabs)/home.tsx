@@ -297,6 +297,7 @@ const Home = () => {
       <ScrollView
         className="flex-1 px-4"
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 60 }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {/* Header */}
         <View className="mb-4 flex-row items-center justify-between">
@@ -350,7 +351,7 @@ const Home = () => {
       {isAdmin && (
         <TouchableOpacity
           onPress={handleAddNews}
-          className="absolute bottom-2 right-4 h-14 w-14 items-center justify-center rounded-full bg-primary shadow-lg"
+          className="absolute bottom-12 right-4 h-14 w-14 items-center justify-center rounded-full bg-primary shadow-lg"
           style={{
             elevation: 5,
             shadowColor: '#000',

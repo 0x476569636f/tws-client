@@ -88,7 +88,10 @@ const ProfileScreen = () => {
 
   return (
     <ScreenWrapper routeName="Profile">
-      <ScrollView className="flex-1 rounded-md p-6" showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 60 }}
+        className="flex-1 rounded-md p-6"
+        showsVerticalScrollIndicator={false}>
         <View className="mb-4 flex flex-col items-center">
           {/* Display Avatar */}
           <Avatar className="mb-4 h-24 w-24 rounded-full border-2 border-muted" alt="User  avatar">

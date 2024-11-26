@@ -1,25 +1,25 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import React from 'react';
 import { Tabs } from 'expo-router';
+import TabBar from '~/components/TabBar';
 
 const _layout = () => {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-      }}>
+      }}
+      tabBar={(props) => <TabBar {...props} />}>
       <Tabs.Screen
         name="home"
         options={{
           title: 'Beranda',
-          tabBarIcon: ({ color, size }) => <AntDesign name="home" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profil Saya',
-          tabBarIcon: ({ color, size }) => <AntDesign name="user" size={size} color={color} />,
         }}
       />
     </Tabs>
