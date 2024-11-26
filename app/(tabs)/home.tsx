@@ -17,8 +17,7 @@ import { Image } from 'expo-image';
 import FontAwesome from '@expo/vector-icons/FontAwesome5';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useAuth } from '~/context/auth';
-import Loading from '~/components/Loading';
-import { API_URL } from '~/constant';
+import { API_URL, NOT_AVAILABLE_IMAGE } from '~/constant';
 import SkeletonHome from '~/components/SkeletonHome';
 import { Link, router } from 'expo-router';
 import { capitalizeWords } from '~/lib/helpers';
@@ -189,9 +188,7 @@ const Home = () => {
         style={{ width: width * 0.89, height: 200 }}>
         <Image
           source={{
-            uri:
-              item.image ||
-              'https://cydmneaqnonivedzegsi.supabase.co/storage/v1/object/public/images/not-available.jpg',
+            uri: item.image || NOT_AVAILABLE_IMAGE,
           }}
           style={{ width: '100%', height: '100%' }}
           contentFit="cover"
@@ -243,9 +240,7 @@ const Home = () => {
       <TouchableOpacity className="mb-3 flex-row rounded-xl bg-card p-3">
         <Image
           source={{
-            uri:
-              item.image ||
-              'https://cydmneaqnonivedzegsi.supabase.co/storage/v1/object/public/images/not-available.jpg',
+            uri: item.image || NOT_AVAILABLE_IMAGE,
           }}
           style={{ width: 100, height: 100, borderRadius: 10 }}
           contentFit="cover"
