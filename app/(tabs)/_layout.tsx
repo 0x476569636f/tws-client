@@ -15,6 +15,13 @@ const _layout = () => {
           tabBarIcon: ({ color, size }) => <AntDesign name="home" size={size} color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profil Saya',
+          tabBarIcon: ({ color, size }) => <AntDesign name="user" size={size} color={color} />,
+        }}
+      />
     </Tabs>
   );
 };
