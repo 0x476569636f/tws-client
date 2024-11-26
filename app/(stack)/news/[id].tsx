@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, ScrollView, TouchableOpacity, Dimensions, Share, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Image } from 'expo-image';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Text } from '~/components/nativewindui/Text';
 import ScreenWrapper from '~/components/ScreenWrapperWithNavbar';
-import Loading from '~/components/Loading';
-import { API_URL } from '~/constant';
+import { API_URL, NOT_AVAILABLE_IMAGE } from '~/constant';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useColorScheme } from '~/lib/useColorScheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { capitalizeWords } from '~/lib/helpers';
+import SkeletonNewsDetail from '~/components/SkeletonNewsDetail';
+import { useQuery } from 'react-query';
+import axios from 'axios';
 
 interface NewsDetail {
   id: number;
@@ -28,37 +29,30 @@ interface NewsDetail {
   };
 }
 
+const fetchNewsDetail = async (id: string) => {
+  const token = await AsyncStorage.getItem('token');
+  const response = await axios.get(`${API_URL}/news/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return response.data;
+};
+
 const NewsDetailScreen = () => {
   const { id } = useLocalSearchParams();
   const router = useRouter();
-  const [newsDetail, setNewsDetail] = useState<NewsDetail | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const { colors } = useColorScheme();
   const insets = useSafeAreaInsets();
 
-  const fetchNewsDetail = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/news/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      setNewsDetail(response.data);
-      setLoading(false);
-    } catch (err) {
-      console.error('Error fetching news detail:', err);
-      setError('Gagal memuat detail berita');
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchNewsDetail();
-  }, [id]);
+  const {
+    data: newsDetail,
+    error,
+    isLoading,
+  } = useQuery<NewsDetail, Error>(['newsDetail', id], () => fetchNewsDetail(id as string), {
+    enabled: !!id,
+  });
 
   const handleShare = async () => {
     try {
@@ -94,14 +88,8 @@ const NewsDetailScreen = () => {
     ));
   };
 
-  if (loading) {
-    return (
-      <ScreenWrapper routeName="Detail Berita">
-        <View className="flex-1 items-center justify-center">
-          <Loading />
-        </View>
-      </ScreenWrapper>
-    );
+  if (isLoading) {
+    return <SkeletonNewsDetail />;
   }
 
   if (error || !newsDetail) {
@@ -110,9 +98,11 @@ const NewsDetailScreen = () => {
         <View className="flex-1 items-center justify-center p-4">
           <AntDesign name="warning" size={64} color="red" />
           <Text className="mt-4 text-center font-inter-regular text-lg">
-            {error || 'Berita tidak ditemukan'}
+            {error?.message || 'Berita tidak ditemukan'}
           </Text>
-          <TouchableOpacity onPress={fetchNewsDetail} className="mt-4 rounded-lg bg-primary p-3">
+          <TouchableOpacity
+            onPress={() => window.location.reload()}
+            className="mt-4 rounded-lg bg-primary p-3">
             <Text className="font-inter-regular text-white">Coba Lagi</Text>
           </TouchableOpacity>
         </View>
@@ -161,9 +151,7 @@ const NewsDetailScreen = () => {
         <View className="relative">
           <Image
             source={{
-              uri:
-                newsDetail?.image ||
-                'https://cydmneaqnonivedzegsi.supabase.co/storage/v1/object/public/images/not-available.jpg',
+              uri: newsDetail?.image || NOT_AVAILABLE_IMAGE,
             }}
             style={{
               width: Dimensions.get('window').width,
