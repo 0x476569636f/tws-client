@@ -7,18 +7,10 @@ import { Text } from '~/components/nativewindui/Text';
 import ScreenWrapper from '~/components/ScreenWrapperWithNavbar';
 import { Image } from 'expo-image';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { API_URL } from '~/constant';
-import Loading from '~/components/Loading';
-import { string } from 'yup';
+import { API_URL, NOT_AVAILABLE_IMAGE } from '~/constant';
 import { capitalizeWords } from '~/lib/helpers';
-
-interface CategoryWithNews {
-  id: number;
-  namaKategori: string;
-  berita: NewsItem[];
-  createdAt: string;
-  updatedAt: string;
-}
+import { useQuery } from 'react-query';
+import SkeletonNewsByCategory from '~/components/SkeletonNewsByCategory';
 
 interface NewsItem {
   id: number;
@@ -33,41 +25,36 @@ interface NewsItem {
   };
 }
 
+const fetchNewsByCategory = async (categoryId: string | string[]) => {
+  const token = await AsyncStorage.getItem('token');
+  const response = await axios.get(`${API_URL}/news-category/${categoryId}?withNews=true`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return response.data;
+};
+
 const NewsByCategoryScreen = () => {
   const { categoryId } = useLocalSearchParams();
-  const [categoryNews, setCategoryNews] = useState<CategoryWithNews | null>(null);
-  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchNewsByCategory = async () => {
-    try {
-      setLoading(true);
-      const token = await AsyncStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/news-category/${categoryId}?withNews=true`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      setCategoryNews(response.data);
-      setLoading(false);
-      setError(null);
-    } catch (err) {
-      console.error('Error fetching news by category:', err);
-      setError('Gagal memuat berita kategori');
-      setLoading(false);
-    }
-  };
+  const {
+    data: categoryNews,
+    error,
+    isLoading,
+    refetch,
+  } = useQuery(['newsByCategory', categoryId], () => fetchNewsByCategory(categoryId), {
+    enabled: !!categoryId, // hanya jalankan query jika categoryId tersedia
+  });
 
   useEffect(() => {
-    fetchNewsByCategory();
+    fetchNewsByCategory(categoryId);
   }, [categoryId]);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    fetchNewsByCategory().then(() => setRefreshing(false));
+    fetchNewsByCategory(categoryId).then(() => setRefreshing(false));
   }, []);
 
   const renderNewsItem = ({ item }: { item: NewsItem }) => (
@@ -80,9 +67,7 @@ const NewsByCategoryScreen = () => {
       <TouchableOpacity className="mb-4 flex-row rounded-xl bg-card p-3">
         <Image
           source={{
-            uri:
-              item.image ||
-              'https://cydmneaqnonivedzegsi.supabase.co/storage/v1/object/public/images/not-available.jpg',
+            uri: item.image || NOT_AVAILABLE_IMAGE,
           }}
           style={{ width: 100, height: 100, borderRadius: 10 }}
           contentFit="cover"
@@ -101,14 +86,8 @@ const NewsByCategoryScreen = () => {
     </Link>
   );
 
-  if (loading) {
-    return (
-      <ScreenWrapper routeName="Berita Kategori">
-        <View className="flex-1 items-center justify-center">
-          <Loading />
-        </View>
-      </ScreenWrapper>
-    );
+  if (isLoading) {
+    return <SkeletonNewsByCategory />;
   }
 
   if (error) {
@@ -116,12 +95,22 @@ const NewsByCategoryScreen = () => {
       <ScreenWrapper routeName="Berita Kategori">
         <View className="flex-1 items-center justify-center p-4">
           <AntDesign name="warning" size={64} color="red" />
-          <Text className="mt-4 text-center font-inter-regular text-lg">{error}</Text>
-          <TouchableOpacity
-            onPress={fetchNewsByCategory}
-            className="mt-4 rounded-lg bg-primary p-3">
+          <Text className="mt-4 text-center font-inter-regular text-lg">
+            Gagal memuat berita kategori
+          </Text>
+          <TouchableOpacity onPress={() => refetch()} className="mt-4 rounded-lg bg-primary p-3">
             <Text className="font-inter-regular text-white">Coba Lagi</Text>
           </TouchableOpacity>
+        </View>
+      </ScreenWrapper>
+    );
+  }
+
+  if (!categoryNews) {
+    return (
+      <ScreenWrapper routeName="Berita Kategori">
+        <View className="flex-1 items-center justify-center">
+          <Text className="font-inter-regular text-lg">Tidak ada data berita kategori.</Text>
         </View>
       </ScreenWrapper>
     );
