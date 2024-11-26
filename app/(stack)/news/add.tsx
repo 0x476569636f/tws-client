@@ -1,4 +1,3 @@
-// app/(stack)/news/add.tsx
 import React, { useState } from 'react';
 import {
   View,
@@ -17,26 +16,17 @@ import * as yup from 'yup';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Toast from 'react-native-toast-message';
-
-// Komponen & Styling
 import { Text } from '~/components/nativewindui/Text';
 import { Button } from '~/components/nativewindui/Button';
 import Input from '~/components/Input';
 import ScreenWrapper from '~/components/ScreenWrapperWithNavbar';
 import Loading from '~/components/Loading';
-
-// Icons
-import AntDesign from '@expo/vector-icons/AntDesign';
-import Ionicons from '@expo/vector-icons/Ionicons';
-
-// Konstanta & Utilities
 import { API_URL } from '~/constant';
 import { useColorScheme } from '~/lib/useColorScheme';
 import { supabase } from '~/lib/supabase';
 import * as FileSystem from 'expo-file-system';
 import { decode } from 'base64-arraybuffer';
 
-// Skema Validasi
 const newsSchema = yup.object().shape({
   judul: yup
     .string()
@@ -47,7 +37,6 @@ const newsSchema = yup.object().shape({
   kategoriId: yup.number().required('Kategori harus dipilih'),
 });
 
-// Tipe Data
 interface NewsFormData {
   judul: string;
   isi: string;
@@ -218,7 +207,7 @@ const AddNewsScreen = () => {
   };
 
   return (
-    <ScreenWrapper>
+    <ScreenWrapper routeName="Buat Berita">
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}>
@@ -227,7 +216,7 @@ const AddNewsScreen = () => {
           contentContainerStyle={{ paddingBottom: 100 }}>
           <View className="p-4">
             {/* Judul Halaman */}
-            <Text variant="title2" className="mb-4 font-inter-bold">
+            <Text variant="title2" className="mb-4 font-inter-medium">
               Tambah Berita Baru
             </Text>
 
