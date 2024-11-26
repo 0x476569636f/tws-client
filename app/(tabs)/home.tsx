@@ -351,7 +351,7 @@ const Home = () => {
       {isAdmin && (
         <TouchableOpacity
           onPress={handleAddNews}
-          className="absolute bottom-6 right-4 h-14 w-14 items-center justify-center rounded-full bg-primary shadow-lg"
+          className="absolute bottom-12 right-4 h-14 w-14 items-center justify-center rounded-full bg-primary shadow-lg"
           style={{
             elevation: 5,
             shadowColor: '#000',
