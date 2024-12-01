@@ -10,6 +10,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 const icons = {
   home: (props: any) => <AntDesign name="home" size={24} {...props} />,
+  search: (props: any) => <AntDesign name="search1" size={24} {...props} />,
   motivation: (props: any) => <AntDesign name="book" size={24} {...props} />,
   profile: (props: any) => <AntDesign name="user" size={24} {...props} />,
 };

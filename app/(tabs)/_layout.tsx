@@ -16,6 +16,12 @@ const _layout = () => {
           title: 'Beranda',
         }}
       />
+       <Tabs.Screen
+        name="search"
+        options={{
+          title: 'Cari Berita',
+        }}
+      />
       <Tabs.Screen
         name="motivation"
         options={{
