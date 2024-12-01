@@ -146,12 +146,7 @@ const NewsDetailScreen = () => {
             }}
             contentFit="cover"
           />
-          <View
-            className="absolute bottom-0 left-0 right-0 bg-black/50 p-4"
-            style={{
-              borderBottomLeftRadius: 20,
-              borderBottomRightRadius: 20,
-            }}>
+          <View className="absolute bottom-0 left-0 right-0 bg-black/50 p-4">
             <Text className="font-inter-bold text-xl text-white" numberOfLines={2}>
               {capitalizeWords(newsDetail?.judul)}
             </Text>
