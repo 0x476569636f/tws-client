@@ -17,33 +17,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { ActivityIndicator } from '~/components/nativewindui/ActivityIndicator';
 import { API_URL, NOT_AVAILABLE_IMAGE } from '~/constant';
 import { debounce } from 'lodash';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-}
-
-interface Category {
-  id: number;
-  namaKategori: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface NewsItem {
-  id: number;
-  judul: string;
-  isi: string;
-  image: string;
-  kategoriId: number;
-  createdAt: string;
-  updatedAt: string;
-  userId: number;
-  user: User;
-  kategori: Category;
-}
+import { NewsItem } from '~/types';
 
 const fetchSearchNews = async (query: string): Promise<NewsItem[]> => {
   if (!query.trim()) return [];

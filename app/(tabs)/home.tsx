@@ -21,35 +21,7 @@ import { API_URL, NOT_AVAILABLE_IMAGE } from '~/constant';
 import SkeletonHome from '~/components/SkeletonHome';
 import { Link, router } from 'expo-router';
 import { capitalizeWords } from '~/lib/helpers';
-
-interface NewsItem {
-  id: number;
-  judul: string;
-  isi: string;
-  kategoriId: number;
-  createdAt: string;
-  updatedAt: string;
-  image: string;
-  userId: number;
-  user: {
-    id: number;
-    name: string;
-    email: string;
-    role: string;
-  };
-  kategori: {
-    id: number;
-    namaKategori: string;
-    createdAt: string;
-    updatedAt: string;
-  };
-}
-
-interface CategoryItem {
-  id: number;
-  namaKategori: string;
-  icon?: string;
-}
+import { NewsItem, Category as CategoryItem } from '~/types';
 
 const fetchNews = async (): Promise<NewsItem[]> => {
   try {

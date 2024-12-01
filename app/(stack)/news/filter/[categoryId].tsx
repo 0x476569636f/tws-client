@@ -11,19 +11,8 @@ import { API_URL, NOT_AVAILABLE_IMAGE } from '~/constant';
 import { capitalizeWords } from '~/lib/helpers';
 import { useQuery } from 'react-query';
 import SkeletonNewsByCategory from '~/components/SkeletonNewsByCategory';
+import { NewsItem } from '~/types';
 
-interface NewsItem {
-  id: number;
-  judul: string;
-  isi: string;
-  image: string;
-  createdAt: string;
-  kategoriId: number;
-  userId: number;
-  user: {
-    name: string;
-  };
-}
 
 const fetchNewsByCategory = async (categoryId: string | string[]) => {
   const token = await AsyncStorage.getItem('token');

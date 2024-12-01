@@ -14,20 +14,7 @@ import { capitalizeWords } from '~/lib/helpers';
 import SkeletonNewsDetail from '~/components/SkeletonNewsDetail';
 import { useQuery } from 'react-query';
 import axios from 'axios';
-
-interface NewsDetail {
-  id: number;
-  judul: string;
-  isi: string;
-  image: string;
-  createdAt: string;
-  kategori: {
-    namaKategori: string;
-  };
-  user: {
-    name: string;
-  };
-}
+import { NewsDetail } from '~/types';
 
 const fetchNewsDetail = async (id: string) => {
   const token = await AsyncStorage.getItem('token');
