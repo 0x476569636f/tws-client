@@ -222,7 +222,10 @@ const Home = () => {
         params: { categoryId: item.id.toString() },
       }}
       asChild>
-      <TouchableOpacity className="bg-primary/10 mr-4 h-20 w-20 items-center justify-center rounded-xl p-3">
+      <TouchableOpacity
+        className="ios:border-primary ios:active:bg-primary/20 mr-4 h-20 w-20 items-center justify-center rounded-xl p-3"
+        accessibilityLabel={`Lihat berita untuk kategori ${item.namaKategori}`}
+        accessibilityRole="button">
         <FontAwesome name={getCategoryIcon(item.namaKategori)} size={24} color="#007bff" />
         <Text className="mt-2 text-center text-xs">{item.namaKategori}</Text>
       </TouchableOpacity>
