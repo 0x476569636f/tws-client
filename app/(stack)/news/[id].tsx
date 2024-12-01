@@ -1,5 +1,13 @@
-import React from 'react';
-import { View, ScrollView, TouchableOpacity, Dimensions, Share, Platform } from 'react-native';
+import React, { useRef } from 'react';
+import {
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+  Share,
+  Platform,
+  Animated,
+} from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -32,6 +40,7 @@ const NewsDetailScreen = () => {
   const router = useRouter();
   const { colors } = useColorScheme();
   const insets = useSafeAreaInsets();
+  const scrollY = useRef(new Animated.Value(0)).current; // Create animated value for scroll position
 
   const {
     data: newsDetail,
@@ -99,12 +108,15 @@ const NewsDetailScreen = () => {
 
   return (
     <ScreenWrapper routeName="Detail Berita">
-      <ScrollView
+      <Animated.ScrollView
         className="flex-1"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingBottom: Platform.OS === 'android' ? insets.bottom + 20 : 20,
-        }}>
+        }}
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+          useNativeDriver: true,
+        })}>
         {/* Header Actions */}
         <View
           className="absolute left-4 right-4 top-[-20px] z-10 flex-row justify-between"
@@ -134,17 +146,25 @@ const NewsDetailScreen = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Hero Image */}
+        {/* Hero Image with Parallax Effect */}
         <View className="relative">
-          <Image
+          <Animated.Image
             source={{
               uri: newsDetail?.image || NOT_AVAILABLE_IMAGE,
             }}
             style={{
               width: Dimensions.get('window').width,
               height: 250,
+              transform: [
+                {
+                  translateY: scrollY.interpolate({
+                    inputRange: [-250, 0, 250],
+                    outputRange: [125, 0, -250],
+                    extrapolate: 'clamp',
+                  }),
+                },
+              ],
             }}
-            contentFit="cover"
           />
           <View className="absolute bottom-0 left-0 right-0 bg-black/50 p-4">
             <Text className="font-inter-bold text-xl text-white" numberOfLines={2}>
@@ -173,7 +193,7 @@ const NewsDetailScreen = () => {
 
         {/* News Content */}
         <View className="px-4">{formatNewsContent(newsDetail?.isi)}</View>
-      </ScrollView>
+      </Animated.ScrollView>
     </ScreenWrapper>
   );
 };
