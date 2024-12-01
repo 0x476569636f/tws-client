@@ -1,9 +1,26 @@
-import AntDesign from '@expo/vector-icons/AntDesign';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Tabs } from 'expo-router';
 import TabBar from '~/components/TabBar';
 
+import { useColorScheme } from '~/lib/useColorScheme';
+import { Appearance } from 'react-native';
+
 const _layout = () => {
+  const { setColorScheme, colorScheme } = useColorScheme();
+
+  // Idk but this fix my tab bar position
+  useEffect(() => {
+    setColorScheme(colorScheme ?? 'light');
+
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      setColorScheme(colorScheme ?? 'light');
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [setColorScheme]);
+
   return (
     <Tabs
       screenOptions={{
@@ -16,7 +33,7 @@ const _layout = () => {
           title: 'Beranda',
         }}
       />
-       <Tabs.Screen
+      <Tabs.Screen
         name="search"
         options={{
           title: 'Cari Berita',
