@@ -134,14 +134,14 @@ const Home = () => {
       isLoading: isNewsLoading,
       isError: isNewsError,
       refetch: refetchNews,
-      isFetching, // Tambahkan ini
+      isFetching, 
     },
     {
       data: categories = [],
       isLoading: isCategoriesLoading,
       isError: isCategoriesError,
       refetch: refetchCategories,
-      isFetching: isCategoriesFetching, // Tambahkan ini
+      isFetching: isCategoriesFetching, 
     },
   ] = useQueries([
     {
