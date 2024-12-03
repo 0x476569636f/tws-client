@@ -121,7 +121,7 @@ const SearchScreen = () => {
           <AntDesign
             name="search1"
             size={64}
-            color={'#007bff'}
+            color={isDarkColorScheme ? '#007bff' : 'rgb(142, 142, 147)'}
             className="mb-4 text-muted-foreground"
           />
           <Text className="text-center font-inter-regular text-muted-foreground">
@@ -154,7 +154,7 @@ const SearchScreen = () => {
             name="search1"
             size={24}
             className="mr-3 text-muted-foreground"
-            color={'#007bff'}
+            color={isDarkColorScheme ? '#007bff' : 'rgb(142, 142, 147)'}
           />
           <TextInput
             className="h-12 flex-1 font-inter-regular text-base"
