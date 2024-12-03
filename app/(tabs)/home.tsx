@@ -19,9 +19,11 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useAuth } from '~/context/auth';
 import { API_URL, NOT_AVAILABLE_IMAGE } from '~/constant';
 import SkeletonHome from '~/components/SkeletonHome';
-import { Link, router } from 'expo-router';
+import { Link } from 'expo-router';
 import { capitalizeWords } from '~/lib/helpers';
 import { NewsItem, Category as CategoryItem } from '~/types';
+import { usePreventDoubleNavigation } from '~/hooks/usePreventDoubleNavigation';
+import { useColorScheme } from '~/lib/useColorScheme';
 
 const fetchNews = async (): Promise<NewsItem[]> => {
   try {
@@ -79,6 +81,8 @@ const Home = () => {
   const { width } = Dimensions.get('window');
   const [isAdmin, setIsAdmin] = React.useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
+  const { navigateSafely } = usePreventDoubleNavigation();
+  const { isDarkColorScheme } = useColorScheme();
 
   React.useEffect(() => {
     const checkAdminStatus = async () => {
@@ -97,7 +101,7 @@ const Home = () => {
   }, []);
 
   const handleAddNews = () => {
-    router.push('/news/add');
+    navigateSafely('/news/add', 'push');
   };
 
   const [
@@ -177,22 +181,28 @@ const Home = () => {
     </Link>
   );
 
-  const renderCategoryItem = ({ item }: { item: CategoryItem }) => (
-    <Link
-      href={{
-        pathname: '/news/filter/[categoryId]',
-        params: { categoryId: item.id.toString() },
-      }}
-      asChild>
-      <TouchableOpacity
-        className="ios:border-primary ios:active:bg-primary/20 mr-4 h-20 w-20 items-center justify-center rounded-xl p-3"
-        accessibilityLabel={`Lihat berita untuk kategori ${item.namaKategori}`}
-        accessibilityRole="button">
-        <FontAwesome name={getCategoryIcon(item.namaKategori)} size={24} color="#007bff" />
-        <Text className="mt-2 text-center text-xs">{item.namaKategori}</Text>
-      </TouchableOpacity>
-    </Link>
-  );
+  const renderCategoryItem = ({ item }: { item: CategoryItem }) => {
+    return (
+      <Link
+        href={{
+          pathname: '/news/filter/[categoryId]',
+          params: { categoryId: item.id.toString() },
+        }}
+        asChild>
+        <TouchableOpacity
+          className="ios:border-primary ios:active:bg-primary/20 mr-4 h-20 w-20 items-center justify-center rounded-xl bg-card p-3"
+          accessibilityLabel={`Lihat berita untuk kategori ${item.namaKategori}`}
+          accessibilityRole="button">
+          <FontAwesome
+            name={getCategoryIcon(item.namaKategori)}
+            size={24}
+            color={isDarkColorScheme ? '#007bff' : 'black'}
+          />
+          <Text className="mt-2 text-center text-xs">{item.namaKategori}</Text>
+        </TouchableOpacity>
+      </Link>
+    );
+  };
 
   const renderLatestNewsItem = ({ item }: { item: NewsItem }) => (
     <Link
