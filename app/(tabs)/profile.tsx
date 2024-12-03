@@ -42,8 +42,8 @@ const ProfileScreen = () => {
 
   const handleLogout = async () => {
     Alert.alert(
-      'Logout Confirmation',
-      'Are you sure you want to log out?',
+      'Konfirmasi',
+      'Apakah anda yakin ingin keluar?',
       [
         {
           text: 'Cancel',
