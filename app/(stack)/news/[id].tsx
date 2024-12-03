@@ -1,15 +1,6 @@
 import React, { useRef } from 'react';
-import {
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Dimensions,
-  Share,
-  Platform,
-  Animated,
-} from 'react-native';
+import { View, TouchableOpacity, Dimensions, Share, Platform, Animated } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Image } from 'expo-image';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Text } from '~/components/nativewindui/Text';
 import ScreenWrapper from '~/components/ScreenWrapperWithNavbar';
@@ -40,7 +31,7 @@ const NewsDetailScreen = () => {
   const router = useRouter();
   const { colors } = useColorScheme();
   const insets = useSafeAreaInsets();
-  const scrollY = useRef(new Animated.Value(0)).current; // Create animated value for scroll position
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const {
     data: newsDetail,

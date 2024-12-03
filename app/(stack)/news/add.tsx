@@ -51,7 +51,7 @@ export const uploadFile = async (folderName: string, fileUri: string, isImage = 
     });
     const imageData = decode(fileBase64);
 
-    const { data, error } = await supabase.storage.from('images').upload(fileName, imageData, {
+    const { error } = await supabase.storage.from('images').upload(fileName, imageData, {
       contentType: isImage ? 'image/*' : 'video/*',
       cacheControl: '3600',
       upsert: false,
@@ -182,7 +182,7 @@ const AddNewsScreen = () => {
       const token = await AsyncStorage.getItem('token');
 
       // Kirim data berita ke API
-      const response = await axios.post(`${API_URL}/news`, payload, {
+      await axios.post(`${API_URL}/news`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

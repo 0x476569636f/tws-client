@@ -101,19 +101,12 @@ const Home = () => {
   };
 
   const [
-    {
-      data: news = [],
-      isLoading: isNewsLoading,
-      isError: isNewsError,
-      refetch: refetchNews,
-      isFetching, 
-    },
+    { data: news = [], isLoading: isNewsLoading, isError: isNewsError, refetch: refetchNews },
     {
       data: categories = [],
       isLoading: isCategoriesLoading,
       isError: isCategoriesError,
       refetch: refetchCategories,
-      isFetching: isCategoriesFetching, 
     },
   ] = useQueries([
     {
@@ -136,7 +129,6 @@ const Home = () => {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    // Gabungkan kedua refetch
     Promise.all([refetchNews(), refetchCategories()])
       .then(() => {
         setRefreshing(false);
@@ -147,7 +139,6 @@ const Home = () => {
       });
   }, [refetchNews, refetchCategories]);
 
-  // Render item trending news
   const renderTrendingItem = ({ item }: { item: NewsItem }) => (
     <Link
       href={{
@@ -186,7 +177,6 @@ const Home = () => {
     </Link>
   );
 
-  // Render kategori berita
   const renderCategoryItem = ({ item }: { item: CategoryItem }) => (
     <Link
       href={{
@@ -204,7 +194,6 @@ const Home = () => {
     </Link>
   );
 
-  // Render berita terbaru
   const renderLatestNewsItem = ({ item }: { item: NewsItem }) => (
     <Link
       href={{
@@ -235,12 +224,9 @@ const Home = () => {
     </Link>
   );
 
-  // Tampilan loading
   if (isNewsLoading || isCategoriesLoading) {
     return <SkeletonHome />;
   }
-
-  // Tampilan error
 
   if (isNewsError || isCategoriesError || !Array.isArray(news) || !Array.isArray(categories)) {
     return (

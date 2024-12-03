@@ -5,7 +5,6 @@ import {
   View,
   Pressable,
   Dimensions,
-  Alert,
 } from 'react-native';
 import React, { useState } from 'react';
 import ScreenWrapper from '~/components/ScreenWrapperWithNavbar';

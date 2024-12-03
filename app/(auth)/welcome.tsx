@@ -3,7 +3,6 @@ import { View, Pressable } from 'react-native';
 import { Button } from '~/components/nativewindui/Button';
 import ScreenWrapper from '~/components/ScreenWrapperWithNavbar';
 import { Text } from '~/components/nativewindui/Text';
-import { useRouter } from 'expo-router';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -14,7 +13,6 @@ import Animated, {
 import { usePreventDoubleNavigation } from '~/hooks/usePreventDoubleNavigation';
 
 const Welcome = () => {
-  const router = useRouter();
   const { navigateSafely, isNavigating } = usePreventDoubleNavigation();
 
   // Animasi translasi vertikal untuk logo

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
 import { Text } from '~/components/nativewindui/Text';
 import ScreenWrapper from '~/components/ScreenWrapperWithNavbar';
 import Loading from '~/components/Loading';
@@ -11,7 +10,6 @@ import { Avatar, AvatarImage } from '~/components/nativewindui/Avatar';
 import { DEFAULT_AVATAR } from '~/constant';
 
 const ProfileScreen = () => {
-  const router = useRouter();
   const { logout } = useAuth();
   const [userProfile, setUserProfile] = useState<{
     name: string;
