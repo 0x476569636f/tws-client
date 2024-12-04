@@ -2,15 +2,6 @@
 
 Vigenesia adalah aplikasi mobile yang dibangun menggunakan React Native dan Expo. Aplikasi ini merupakan client untuk proyek API [Vigenesia](https://github.com/0xirvan/vigenesia-api)
 
-## Fitur
-
-- **Registrasi dan Login**
-- **Create Read Delete untuk berita**
-- **Pencarian berita**
-- **CRUD untuk motivasi**
-
-Catatan: Hanya admin yang bisa menambah dan menghapus berita
-
 ## Anggota Kelompok 3
 
 | No  | Nama Anggota   | NIM      |
@@ -20,6 +11,15 @@ Catatan: Hanya admin yang bisa menambah dan menghapus berita
 | 3   | Azfa Haqqani   | 10220082 |
 | 4   | Haikal Putra   | 10220068 |
 | 5   | Tirta Raga     | 10220021 |
+
+## Fitur
+
+- **Registrasi dan Login**
+- **Create Read Delete untuk berita**
+- **Pencarian berita**
+- **CRUD untuk motivasi**
+
+Catatan: Hanya admin yang bisa menambah dan menghapus berita
 
 ## Prerequisites
 
