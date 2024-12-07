@@ -39,3 +39,12 @@ export interface NewsDetail {
     name: string;
   };
 }
+
+export interface Motivation {
+  id: number;
+  isi_motivasi: string;
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+  user: User;
+}
