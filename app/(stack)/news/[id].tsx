@@ -1,12 +1,11 @@
 import React, { useRef } from 'react';
-import { View, TouchableOpacity, Dimensions, Share, Platform, Animated } from 'react-native';
+import { View, TouchableOpacity, Dimensions, Share, Platform, Animated, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Text } from '~/components/nativewindui/Text';
 import ScreenWrapper from '~/components/ScreenWrapperWithNavbar';
 import { API_URL, NOT_AVAILABLE_IMAGE } from '~/constant';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { useColorScheme } from '~/lib/useColorScheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { capitalizeWords } from '~/lib/helpers';
@@ -14,10 +13,23 @@ import SkeletonNewsDetail from '~/components/SkeletonNewsDetail';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { NewsDetail } from '~/types';
+import Toast from 'react-native-toast-message';
+import { useAuth } from '~/context/auth';
 
 const fetchNewsDetail = async (id: string) => {
   const token = await AsyncStorage.getItem('token');
   const response = await axios.get(`${API_URL}/news/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return response.data;
+};
+
+const deleteNews = async (id: string) => {
+  const token = await AsyncStorage.getItem('token');
+  const response = await axios.delete(`${API_URL}/news/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -32,6 +44,7 @@ const NewsDetailScreen = () => {
   const { colors } = useColorScheme();
   const insets = useSafeAreaInsets();
   const scrollY = useRef(new Animated.Value(0)).current;
+  const { user } = useAuth();
 
   const {
     data: newsDetail,
@@ -41,15 +54,44 @@ const NewsDetailScreen = () => {
     enabled: !!id,
   });
 
-  const handleShare = async () => {
-    try {
-      await Share.share({
-        title: newsDetail?.judul,
-        message: `Baca berita menarik: ${newsDetail?.judul}\n\nBuka sekarang di Vigenesia App`,
-      });
-    } catch (error) {
-      console.error('Error sharing:', error);
-    }
+  const handleDelete = async () => {
+    Alert.alert(
+      'Konfirmasi Hapus',
+      'Apakah Anda yakin ingin menghapus berita ini?',
+      [
+        {
+          text: 'Batal',
+          style: 'cancel',
+        },
+        {
+          text: 'Hapus',
+          onPress: async () => {
+            try {
+              await deleteNews(id as string);
+              Toast.show({
+                type: 'success',
+                text1: 'Berita berhasil dihapus',
+                text2: 'Anda akan diarahkan ke halaman beranda',
+                visibilityTime: 2000,
+                topOffset: 60,
+                onHide: async () => {
+                  router.replace('/home');
+                },
+              });
+            } catch (error) {
+              Toast.show({
+                type: 'error',
+                text1: 'Gagal menghapus berita',
+                text2: 'Silakan coba lagi',
+                visibilityTime: 2000,
+                topOffset: 60,
+              });
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   const formatDate = (dateString: string) => {
@@ -127,17 +169,20 @@ const NewsDetailScreen = () => {
             }}>
             <AntDesign name="arrowleft" size={24} color={colors.foreground} />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleShare}
-            className="rounded-full p-2"
-            style={{
-              backgroundColor: colors.card + '30',
-            }}>
-            <Ionicons name="share-social" size={24} color={colors.foreground} />
-          </TouchableOpacity>
+
+          {user?.role === 'ADMIN' && (
+            <TouchableOpacity
+              onPress={handleDelete}
+              className="rounded-full p-2"
+              style={{
+                backgroundColor: colors.card + '30',
+              }}>
+              <AntDesign name="delete" size={24} color={colors.foreground} />
+            </TouchableOpacity>
+          )}
         </View>
 
-        {/* Hero Image with Parallax Effect */}
+        {/* Parallax Effect */}
         <View className="relative">
           <Animated.Image
             source={{
