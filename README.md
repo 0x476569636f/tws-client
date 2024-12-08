@@ -99,6 +99,6 @@ https://docs.expo.dev/build/setup/
 
 Berikut adalah link untuk mengunduh APK yang sudah di bangun / compile menjadi .apk
 
-APK Build: [VIGENESIA APK](https://expo.dev/accounts/darknet1255/projects/vigenesia/builds/9f9a1c04-4246-44e4-8b93-0330b4a5b5fa)
+APK Build: [VIGENESIA APK](https://expo.dev/accounts/darknet1255/projects/vigenesia/builds/e87b712d-482f-4dba-9442-b5c390c58f9c)
 
 Catatan: Link akan di update jika ada build baru
