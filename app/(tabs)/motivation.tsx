@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList, TouchableOpacity, Alert, ScrollView, Platform } from 'react-native';
+import { View, FlatList, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { Text } from '~/components/nativewindui/Text';
 import { API_URL, DEFAULT_AVATAR } from '~/constant';
 import axios from 'axios';
@@ -8,7 +8,6 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import ScreenWrapper from '~/components/ScreenWrapperWithNavbar';
 import { Motivation } from '~/types';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Avatar, AvatarImage } from '~/components/nativewindui/Avatar';
 import { useColorScheme } from '~/lib/useColorScheme';
@@ -17,6 +16,7 @@ import Toast from 'react-native-toast-message';
 import { useAuth } from '~/context/auth';
 import { usePreventDoubleNavigation } from '~/hooks/usePreventDoubleNavigation';
 import MotivationSkeletonLoader from '~/components/SkeletonMotivationScreen';
+import { RefreshControl } from 'react-native-gesture-handler';
 
 const fetchMotivations = async (): Promise<Motivation[]> => {
   const token = await AsyncStorage.getItem('token');
@@ -40,13 +40,13 @@ const deleteMotivation = async (id: string) => {
 };
 
 const MotivationScreen = () => {
-  const insets = useSafeAreaInsets();
   const queryClient = useQueryClient();
   const { isDarkColorScheme } = useColorScheme();
   const { user } = useAuth();
   const { navigateSafely, isNavigating } = usePreventDoubleNavigation();
+  const [refreshing, setRefreshing] = React.useState(false);
 
-  const { data: motivations = [], isLoading } = useQuery('motivations', fetchMotivations);
+  const { data: motivations = [], isLoading, refetch } = useQuery('motivations', fetchMotivations);
 
   const mutation = useMutation(deleteMotivation, {
     onSuccess: () => {
@@ -86,7 +86,13 @@ const MotivationScreen = () => {
   };
 
   const handleAdd = () => {
-    navigateSafely('/motivation/add-or-update', 'push');
+    navigateSafely('/motivation/add', 'push');
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
   };
 
   const renderMotivationItem = ({ item }: { item: Motivation }) => (
@@ -141,9 +147,11 @@ const MotivationScreen = () => {
     <ScreenWrapper routeName="Motivasi">
       <ScrollView
         className="dark:bg-android-background flex-1 bg-background px-4 pt-3"
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingBottom: Platform.OS === 'android' ? insets.bottom + 20 : 20,
-        }}>
+          paddingBottom: 120,
+        }}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <FlatList
           data={motivations}
           renderItem={renderMotivationItem}
