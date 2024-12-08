@@ -45,6 +45,12 @@ const NewsDetailScreen = () => {
   const insets = useSafeAreaInsets();
   const scrollY = useRef(new Animated.Value(0)).current;
   const { user } = useAuth();
+  const { width } = Dimensions.get('window');
+  const scale = width / 320;
+
+  const normalizeFontSize = (size: any) => {
+    return Math.round(size * scale);
+  };
 
   const {
     data: newsDetail,
@@ -109,9 +115,14 @@ const NewsDetailScreen = () => {
 
     return paragraphs.map((paragraph, index) => (
       <Text
-        variant={'body'}
+        style={{
+          fontSize: normalizeFontSize(14),
+          lineHeight: normalizeFontSize(22),
+          textAlign: 'justify',
+          marginBottom: 16,
+        }}
         key={index}
-        className="mb-6 text-justify font-inter-regular leading-relaxed text-foreground">
+        className="font-inter-regular text-foreground">
         {paragraph.trim()}
       </Text>
     ));
