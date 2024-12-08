@@ -10,7 +10,12 @@ export const capitalizeWords = (str: string) => {
 export function formatTime(timestamp: string): string {
   const date = new Date(timestamp);
   const now = new Date();
-  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  // Adjust the date by adding 7 hours to match the server timezone
+  // This is a temporary solution until the server returns the correct timezone
+  const adjustedDate = new Date(date.getTime() + 7 * 60 * 60 * 1000);
+
+  const diffInSeconds = Math.floor((now.getTime() - adjustedDate.getTime()) / 1000);
 
   if (diffInSeconds < 60) return `${diffInSeconds} detik yang lalu`;
   if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} menit yang lalu`;
@@ -21,5 +26,5 @@ export function formatTime(timestamp: string): string {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
-  }).format(date);
+  }).format(adjustedDate);
 }
