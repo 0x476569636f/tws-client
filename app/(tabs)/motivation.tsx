@@ -17,6 +17,7 @@ import { useAuth } from '~/context/auth';
 import { usePreventDoubleNavigation } from '~/hooks/usePreventDoubleNavigation';
 import MotivationSkeletonLoader from '~/components/SkeletonMotivationScreen';
 import { RefreshControl } from 'react-native-gesture-handler';
+import { Link } from 'expo-router';
 
 const fetchMotivations = async (): Promise<Motivation[]> => {
   const token = await AsyncStorage.getItem('token');
@@ -97,6 +98,18 @@ const MotivationScreen = () => {
 
   const renderMotivationItem = ({ item }: { item: Motivation }) => (
     <View className="dark:bg-android-card dark:border-android-border mb-3 rounded-xl border border-border bg-card p-4 shadow-sm">
+      {item.userId === user?.id && (
+        <View className="absolute right-2 top-2 flex-row items-center space-x-2">
+          <Link
+            href={{ pathname: '/motivation/update', params: { id: item.id.toString() } }}
+            asChild>
+            <TouchableOpacity className="p-1">
+              <AntDesign name="edit" size={18} color={isDarkColorScheme ? '#fff' : '#000'} />
+            </TouchableOpacity>
+          </Link>
+        </View>
+      )}
+
       <View className="mb-3 flex-row items-center">
         <Avatar
           alt="User Image"
