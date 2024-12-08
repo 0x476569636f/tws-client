@@ -15,7 +15,7 @@ export function formatTime(timestamp: string): string {
   // This is a temporary solution until the server returns the correct timezone
   const adjustedDate = new Date(date.getTime() + 7 * 60 * 60 * 1000);
 
-  const diffInSeconds = Math.floor((now.getTime() - adjustedDate.getTime()) / 1000);
+  const diffInSeconds = Math.floor((now.getTime() - adjustedDate.getTime()) / 1000) + 10;
 
   if (diffInSeconds < 60) return `${diffInSeconds} detik yang lalu`;
   if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} menit yang lalu`;
