@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   View,
   ScrollView,
-  TouchableOpacity,
   Platform,
   KeyboardAvoidingView,
   TextInput,
@@ -17,7 +16,6 @@ import Toast from 'react-native-toast-message';
 import { Text } from '~/components/nativewindui/Text';
 import { Button } from '~/components/nativewindui/Button';
 import ScreenWrapper from '~/components/ScreenWrapperWithNavbar';
-import Loading from '~/components/Loading';
 import { API_URL } from '~/constant';
 import { useColorScheme } from '~/lib/useColorScheme';
 
